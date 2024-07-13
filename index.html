@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TalkoGames Library</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="favicon.png">
+  <style>
+    body {
+      font-family: 'Press Start 2P', cursive;
+      background-color: #1a202c;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .retro-button {
+      background-color: #ff6b6b;
+      border: 2px solid #ff4757;
+      transition: transform 0.2s;
+    }
+    .retro-button:hover {
+      transform: scale(1.05);
+    }
+    .retro-vibe {
+      font-family: 'Press Start 2P', cursive;
+      color: #ffe66d;
+      text-shadow: 2px 2px 0 #ff4757, -2px -2px 0 #1e90ff, 2px -2px 0 #1e90ff, -2px 2px 0 #ff4757;
+    }
+    .info-button {
+      background-color: #1e90ff;
+      border: 2px solid #4169e1;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background-color: #2d3748;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 0.5rem;
+      position: relative;
+    }
+    .close {
+      color: #aaa;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+      color: #fff;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .game-image-container {
+      width: 100%;
+      padding-top: 60%; /* 300/500 = 0.6 = 60% */
+      position: relative;
+      overflow: hidden;
+      border-radius: 0.5rem;
+    }
+    .game-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .game-card {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 2rem;
+      justify-items: center;
+    }
+    @media (min-width: 640px) {
+      .games-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 1024px) {
+      .games-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .modal-content {
+        max-width: 1000px;
+      }
+    }
+    @media (min-width: 1280px) {
+      .games-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .modal-content {
+        max-width: 1200px;
+      }
+    }
+
+    @media (max-width: 640px) {
+    .retro-vibe {
+      font-size: 1.25rem;
+      text-shadow: 1px 1px 0 #ff4757, -1px -1px 0 #1e90ff, 1px -1px 0 #1e90ff, -1px 1px 0 #ff4757;
+    }
+
+  }
+    .modal-description h1 {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+    }
+    .modal-description h2 {
+      font-size: 1.3em;
+      font-weight: bold;
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+    }
+    .modal-description p {
+      margin-bottom: 1em;
+    }
+    .modal-description ul, .modal-description ol {
+      margin-bottom: 1em;
+      padding-left: 1.5em;
+    }
+    .modal-description li {
+      margin-bottom: 0.5em;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-900">
+  <nav class="flex flex-col sm:flex-row justify-between items-center p-4 bg-gray-800">
+    <div class="text-xl sm:text-2xl retro-vibe mb-2 sm:mb-0">TalkoGames</div>
+    <div>
+      <a href="tos.html" class="text-white hover:underline text-sm sm:text-base">Terms of Service</a>
+    </div>
+  </nav>
+
+  <header class="flex flex-col items-center justify-center h-64 bg-gray-700 text-center p-6">
+    <h1 class="text-2xl md:text-2xl retro-vibe">Welcome to TalkoGames</h1>
+    <p class="mt-4 text-xl md:text-2xl">Your ultimate game library</p>
+  </header>
+
+  <main class="flex-grow p-6">
+    <section class="games-grid">
+      <div class="game-card flex flex-col items-center">
+        <div class="game-image-container">
+          <img src="images/game1/1v1.webp" alt="Game 1" class="game-image">
+        </div>
+        <p class="mt-2 text-xl">1v1.lol (Fortnite)</p>
+        <div class="flex mt-2">
+          <a href="games/1v1-lol.html" class="px-4 py-2 retro-button text-xl mr-2 no-underline inline-block">Play</a>
+          <button class="px-3 py-2 info-button text-xl" onclick="openModal('game1')">?</button>
+        </div>
+      </div>
+      <div class="game-card flex flex-col items-center">
+        <div class="game-image-container">
+          <img src="images/leaderstrike/leaderstrike.jpg" alt="Game 1" class="game-image">
+        </div>
+        <p class="mt-2 text-xl">Leader Strike</p>
+        <div class="flex mt-2">
+          <a href="games/leaderstrike.html" class="px-4 py-2 retro-button text-xl mr-2 no-underline inline-block">Play</a>
+          <button class="px-3 py-2 info-button text-xl" onclick="openModal('game1')">?</button>
+        </div>
+      </div>
+      <div class="game-card flex flex-col items-center">
+        <div class="game-image-container">
+          <img src="images/minecraft/minecraft.jpg" alt="Game 1" class="game-image">
+        </div>
+        <p class="mt-2 text-xl">Minecraft</p>
+        <div class="flex mt-2">
+          <a href="https://classic.minecraft.net/" class="px-4 py-2 retro-button text-xl mr-2 no-underline inline-block">Play</a>
+          <button class="px-3 py-2 info-button text-xl" onclick="openModal('game1')">?</button>
+        </div>
+      </div>
+      <div class="game-card flex flex-col items-center">
+        <div class="game-image-container">
+          <img src="images/languageguessr/languageguessr.jpg" alt="Game 1" class="game-image">
+        </div>
+        <p class="mt-2 text-xl">LanguageGuessr</p>
+        <div class="flex mt-2">
+          <a href="games/languageguessr.html" class="px-4 py-2 retro-button text-xl mr-2 no-underline inline-block">Play</a>
+          <button class="px-3 py-2 info-button text-xl" onclick="openModal('game1')">?</button>
+        </div>
+      </div>
+      <div class="game-card flex flex-col items-center">
+        <div class="game-image-container">
+          <img src="images/snowrider3d/snowrider3d.jpg" alt="Game 1" class="game-image">
+        </div>
+        <p class="mt-2 text-xl">Snow Rider 3D</p>
+        <div class="flex mt-2">
+          <a href="games/snowrider3d.html" class="px-4 py-2 retro-button text-xl mr-2 no-underline inline-block">Play</a>
+          <button class="px-3 py-2 info-button text-xl" onclick="openModal('game1')">?</button>
+        </div>
+      </div>
+      <div class="game-card flex flex-col items-center">
+        <div class="game-image-container">
+          <img src="images/archerywordtour/ArcheryWorldTour.jpg" alt="Game 1" class="game-image">
+        </div>
+        <p class="mt-2 text-xl">Archery World Tour</p>
+        <div class="flex mt-2">
+          <a href="games/archerywordtour.html" class="px-4 py-2 retro-button text-xl mr-2 no-underline inline-block">Play</a>
+          <button class="px-3 py-2 info-button text-xl" onclick="openModal('game1')">?</button>
+        </div>
+      </div>
+      <div class="game-card flex flex-col items-center">
+        <div class="game-image-container">
+          <img src="images/neonrider/neonrider.jpeg" alt="Game 1" class="game-image">
+        </div>
+        <p class="mt-2 text-xl">Neon Rider</p>
+        <div class="flex mt-2">
+          <a href="games/neonrider.html" class="px-4 py-2 retro-button text-xl mr-2 no-underline inline-block">Play</a>
+          <button class="px-3 py-2 info-button text-xl" onclick="openModal('game1')">?</button>
+        </div>
+      </div>
+      <div class="game-card flex flex-col items-center">
+        <div class="game-image-container">
+          <img src="images/8ball/8ball.jpg" alt="Game 1" class="game-image">
+        </div>
+        <p class="mt-2 text-xl">8 Ball</p>
+        <div class="flex mt-2">
+          <a href="games/8ball.html" class="px-4 py-2 retro-button text-xl mr-2 no-underline inline-block">Play</a>
+          <button class="px-3 py-2 info-button text-xl" onclick="openModal('game1')">?</button>
+        </div>
+      </div>
+      <div class="game-card flex flex-col items-center">
+        <div class="game-image-container">
+          <img src="images/tabletennis/tabletennis.jpg" alt="Game 1" class="game-image">
+        </div>
+        <p class="mt-2 text-xl">Table Tennis</p>
+        <div class="flex mt-2">
+          <a href="games/tabletennis.html" class="px-4 py-2 retro-button text-xl mr-2 no-underline inline-block">Play</a>
+          <button class="px-3 py-2 info-button text-xl" onclick="openModal('game1')">?</button>
+        </div>
+      </div>
+      <!-- Repeat this structure for other games (game2 to game20) -->
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div id="gameModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modalTitle" class="text-2xl mb-4"></h2>
+      <div id="modalImages" class="flex flex-wrap justify-center gap-4 mb-4"></div>
+      <div id="modalDescription" class="text-sm md:text-base modal-description"></div>
+    </div>
+  </div>
+
+  <footer class="bg-gray-800 text-center p-4 mt-auto">
+    <p class="text-white">© 2024 TalkoGames. A product of Talkomatic.</p>
+  </footer>
+
+  <script>
+    const modal = document.getElementById("gameModal");
+    const span = document.getElementsByClassName("close")[0];
+    const modalTitle = document.getElementById("modalTitle");
+    const modalDescription = document.getElementById("modalDescription");
+    const modalImages = document.getElementById("modalImages");
+    let gameInfo = {};
+
+    // Fetch game descriptions from JSON file
+    fetch('game-descriptions.json')
+      .then(response => response.json())
+      .then(data => {
+        gameInfo = data;
+      })
+      .catch(error => console.error('Error loading game descriptions:', error));
+
+    function openModal(gameId) {
+      if (!gameInfo[gameId]) {
+        console.error('Game information not found');
+        return;
+      }
+
+      const game = gameInfo[gameId];
+      
+      modalTitle.textContent = game.title;
+      
+      // Parse and set formatted description
+      modalDescription.innerHTML = parseDescription(game.description);
+      
+      // Clear previous images
+      modalImages.innerHTML = '';
+      
+      // Add screenshots
+      game.screenshots.forEach(img => {
+        const imgElement = document.createElement('img');
+        imgElement.src = `images/${gameId}/${img}`;
+        imgElement.alt = `${game.title} screenshot`;
+        imgElement.className = 'w-full sm:w-1/2 md:w-1/3 rounded-lg';
+        modalImages.appendChild(imgElement);
+      });
+
+      modal.style.display = "flex";
+    }
+
+    function parseDescription(description) {
+      const lines = description.trim().split('\n');
+      let html = '';
+      let inList = false;
+      lines.forEach(line => {
+        if (line.startsWith('# ')) {
+          if (inList) {
+            html += '</ul>';
+            inList = false;
+          }
+          html += `<h1>${line.slice(2)}</h1>`;
+        } else if (line.startsWith('## ')) {
+          if (inList) {
+            html += '</ul>';
+            inList = false;
+          }
+          html += `<h2>${line.slice(3)}</h2>`;
+        } else if (line.startsWith('- ')) {
+          if (!inList) {
+            html += '<ul>';
+            inList = true;
+          }
+          html += `<li>${line.slice(2)}</li>`;
+        } else if (line.match(/^\d+\. /)) {
+          if (!inList) {
+            html += '<ol>';
+            inList = true;
+          }
+          html += `<li>${line.replace(/^\d+\. /, '')}</li>`;
+        } else if (line.trim() === '') {
+          if (inList) {
+            html += inList ? '</ul>' : '</ol>';
+            inList = false;
+          }
+        } else {
+          if (inList) {
+            html += inList ? '</ul>' : '</ol>';
+            inList = false;
+          }
+          html += `<p>${line}</p>`;
+        }
+      });
+      if (inList) {
+        html += inList ? '</ul>' : '</ol>';
+      }
+      return html;
+    }
+
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
